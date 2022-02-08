@@ -1,4 +1,11 @@
 <!-- End Page Title -->
+<style>
+  .card-title {
+    padding: 20px 0 15px 25px;
+    
+  }
+</style>
+
 
     <section class="section dashboard">
       <div class="row">
@@ -11,8 +18,8 @@
             <!-- Reports -->
             <div class="col-12">
               <div class="card">
-
-                <div class="filter">
+            
+                <!-- <div class="filter">
                   <a class="icon" href="<?php echo base_url();?>#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                   <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                     <li class="dropdown-header text-start">
@@ -23,12 +30,35 @@
                     <li><a class="dropdown-item" href="<?php echo base_url();?>#">This Month</a></li>
                     <li><a class="dropdown-item" href="<?php echo base_url();?>#">This Year</a></li>
                   </ul>
-                </div>
+                </div> -->
 
 
                 <div class="card-body">
-
-                  <h5 class="card-title">Grafik Kegiatan</h5>
+                  <div class="row">
+                    <div class="col-3">  
+                        <h5 class="card-title">Grafik Kegiatan</h5>
+                    </div>
+                    <div class="col-3">  
+                        <select name="" id="" class=" form-select form-select-sm  mt-3 text-center">
+                          <option value="">
+                             -- Pilih Kegiatan --
+                          </option>
+                          <option value="">
+                            sadasdsa
+                          </option>
+                        </select>
+                    </div>
+                    <div class="col-3">  
+                        <select name="" id="" class=" form-select form-select-sm  mt-3 text-center">
+                          <option value="">
+                             -- Pilih Lokpri --
+                          </option>
+                          <option value="">
+                            sadasdsa
+                          </option>
+                        </select>
+                    </div>
+                  </div>
 
                   <!-- Line Chart -->
                   <div id="reportsChart"></div>
