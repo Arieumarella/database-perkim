@@ -62,8 +62,8 @@
                 <div class="row mb-3">
                   <label for="inputEmail3" class="col-sm-2 col-form-label">Pilih Bidang :</label>
                   <div class="col-sm-3">
-                    <select id="inputState" class="form-select form-select-sm">
-                    <option selected>--- Pilih Bidang ---</option>
+                    <select id="inputState" name="bidangSlect" class="form-select form-select-sm">
+                    <option selected value="0">--- Pilih Bidang ---</option>
                     <?php  foreach ($dataBidang as $data) {?>
                         
                     <option value="<?php echo $data->idx; ?>"><?php echo $data->nama_bidang; ?></option>
@@ -346,6 +346,12 @@ $( document ).ready(function() {
    } 
 
    getData = async function() {
+
+    var bidang =  $('select[name=bidangSlect] option').filter(':selected').val()
+    if(bidang == 0){
+      info('Info', 'Pilih bidang terlebih dahulu.!')
+      return;
+    }
           
      await  $.ajaxSetup({
            "beforeSend" :  $.LoadingOverlay("show"),
@@ -389,18 +395,19 @@ $( document ).ready(function() {
                     data.kota = (lvl != "allWilayah" && lvl != 'provinsi' && idKab != 'default') ? $('select[name=kota] option:selected').val():null;
                     data.kecamatan = (lvl == 'kecamatan' || lvl == 'desa') ? $('select[name=kecamatan] option:selected').val():null;
                     data.desa = (lvl == 'desa') ? $('select[name=desa] option:selected').val():null; 
+                    data.bidang = $('select[name=bidangSlect] option').filter(':selected').val();
     
                 }
              },
                   columns: [
                         {"data": "nama_prov"},
                         {"data": "nama_kab"},
-                        {"data": "nmkec"},
+                        {"data": "kecamatan_nama"},
                         {"data": "desa_nama"},
-                        {"data": "menu"},
                         {"data": "rincian"},
+                        {"data": "Satuan"},
                         {"data": "volume_rk"},
-                        {"data": "satuan"},
+                        {"data": "menu"},
                         {"data": "tahun"},
                   ],
             "columnDefs": [

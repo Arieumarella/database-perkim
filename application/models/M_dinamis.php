@@ -68,52 +68,6 @@ public function delete($tabel, $data){
     $this->db->where($data);
     return $this->db->delete($tabel);
 }
-
-private function _get_datatables_query($tabel, $colom_order, $colom_search, $order, $select)
-    {
-         
-        
-        $this->db->select($select);
-        $this->db->from($tabel);
-        $this->db->join('tb_provinsi', 't_rkperkim.kdlokasi = tb_provinsi.kd_prov', 'INNER');
-        $this->db->join('tb_kabupaten', 't_rkperkim.kdkabkota   = tb_kabupaten.kd_kab and t_rkperkim.kdlokasi=tb_kabupaten.kd_prov', 'INNER');
-        
-        $i = 0;
-     
-        foreach ($colom_search as $item) // loop column 
-        {
-            if($_POST['search']['value']) // if datatable send POST for search
-            {
-                 
-                if($i===0) // first loop
-                {
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
-                    $this->db->like($item, $_POST['search']['value']);
-                }
-                else
-                {
-                    $this->db->or_like($item, $_POST['search']['value']);
-                }
- 
-                if(count($colom_search) - 1 == $i) //last loop
-                    $this->db->group_end(); //close bracket
-            }
-            $i++;
-        }
-         
-        if(isset($_POST['order'])) // here order processing
-        {
-            
-           $this->db->order_by($colom_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-        } 
-        else if(isset($order))
-        {
-            $order = $order;
-            $this->db->order_by(key($order), $order[key($order)]);
-        }
-
-
-    }
  
     public function get_datatables($tabel, $colom_order, $colom_search, $order, $select)
     {
@@ -126,26 +80,30 @@ private function _get_datatables_query($tabel, $colom_order, $colom_search, $ord
     }
 
 
-    function get_all_product($tabel, $colom_order, $colom_search, $order, $select) {
-      $this->datatables->select('menu,tahun,rincian,volume_rk,satuan,desa_nama,nmkec, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
+    public function get_all_product($tabel, $colom_order, $colom_search, $order, $select) {
+      $this->datatables->select('tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
       $this->datatables->from($tabel);
-      $this->datatables->join('tb_provinsi', 't_rkperkim.kdlokasi=tb_provinsi.kd_prov', 'INNER');
-      $this->datatables->join('tb_kabupaten', 't_rkperkim.kdkabkota=tb_kabupaten.kd_kab and t_rkperkim.kdlokasi= tb_kabupaten.kab_kd_prov', 'INNER');
+      $this->datatables->join('tb_provinsi', 'tb_fisik.kdprov=tb_provinsi.kd_prov', 'INNER');
+      $this->datatables->join('tb_kabupaten', 'tb_fisik.kdkab=tb_kabupaten.kd_kab and tb_fisik.kdprov = tb_kabupaten.kab_kd_prov', 'INNER');
 
       if ($this->input->post('provinsi')) {
-          $this->datatables->where('t_rkperkim.kdlokasi', $this->input->post('provinsi'));
+          $this->datatables->where('tb_fisik.kdprov', $this->input->post('provinsi'));
       }
       if ($this->input->post('kota')) {
-          $this->datatables->where('t_rkperkim.kdkabkota', $this->input->post('kota'));
+          $this->datatables->where('tb_fisik.kdkab', $this->input->post('kota'));
       }
       if ($this->input->post('kecamatan')) {
-          $this->datatables->where('t_rkperkim.kdkec', $this->input->post('kecamatan'));
+          $this->datatables->where('tb_fisik.kdkec', $this->input->post('kecamatan'));
       }
       if ($this->input->post('desa')) {
-          $this->datatables->where('t_rkperkim.kd_desa', $this->input->post('desa'));
+          $this->datatables->where('tb_fisik.kddesa', $this->input->post('desa'));
       }
 
-      $this->datatables->add_column('view','menu','tahun','rincian','volume_rk','satuan','desa_nama','nmkec');
+      if ($this->input->post('bidang')) {
+        $this->datatables->where('tb_fisik.kdbidang', $this->input->post('bidang'));
+     }
+
+      $this->datatables->add_column('view','menu','tahun','rincian','volume_rk','Satuan','desa_nama','kecamatan_nama');
       return $this->datatables->generate();
   }
 

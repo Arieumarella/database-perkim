@@ -3,16 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class C_kegiatan extends CI_Controller {
 
-	protected $tabel = 't_rkperkim';
-	protected $select = 't_rkperkim.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov';
-	protected $colom_search = array('t_rkperkim.tahun', 't_rkperkim.menu', 't_rkperkim.rincian','t_rkperkim.volume_rk','t_rkperkim.satuan','t_rkperkim.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
-	protected $colom_order = array('t_rkperkim.tahun', 't_rkperkim.menu', 't_rkperkim.rincian','t_rkperkim.volume_rk','t_rkperkim.satuan','t_rkperkim.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
-	protected $order = array('t_rkperkim.tahun' => 'asc');
+	protected $tabel = 'tb_fisik';
+	protected $select = 'tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov';
+	protected $colom_search = array('tb_fisik.tahun', 'tb_fisik.menu', 'tb_fisik.rincian','tb_fisik.volume_rk','tb_fisik.satuan','tb_fisik.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
+	protected $colom_order = array('tb_fisik.tahun', 'tb_fisik.menu', 'tb_fisik.rincian','tb_fisik.volume_rk','tb_fisik.satuan','tb_fisik.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
+	protected $order = array('tb_fisik.tahun' => 'asc');
 	protected $where,$data;
 
 	// M_dinamis
-	protected $select2 = 't_rkperkim.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov, tb_kecamatan.nam_kec, tb_desa.nama_desa';
-	protected $order2 = 't_rkperkim.tahun';
+	protected $select2 = 'tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov, tb_kecamatan.nam_kec, tb_desa.nama_desa';
+	protected $order2 = 'tb_fisik.tahun';
 	protected $urut = 'asc';
 
 	public function __construct()
@@ -45,38 +45,8 @@ class C_kegiatan extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	public function get_data_tables()
-    {
-        $list = $this->M_dinamis->get_datatables($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
-        $data = array();
-        $no = $_POST['start'];
 
-        foreach ($list as $main) {
-            $no++;
-            $row = array();
-            $row[] = $main->nama_prov;
-            $row[] = $main->nama_kab;
-            $row[] = $main->kecamatan_nama;
-            $row[] = $main->desa_nama;
-            $row[] = $main->menu;
-            $row[] = $main->rincian;
-            $row[] = $main->volume;
-            $row[] = 'Rp. '.number_format($main->nilai_usulan,2,',','.');
-            $data[] = $row;
-        }
- 
-        $output = array(
-                        "draw" => $_POST['draw'],
-                        "recordsTotal" => $this->M_dinamis->count_all($this->tabel, $this->select),
-                        "recordsFiltered" => $this->M_dinamis->count_filtered($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select),
-                        "data" => $data,
-                );
-        //output to json format
-        echo json_encode($output);
-    }
-
-
-    function get_product_json() { //get product data and encode to be JSON object
+    public function get_product_json() { //get product data and encode to be JSON object
       header('Content-Type: application/json');
       echo $this->M_dinamis->get_all_product($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
   	}
