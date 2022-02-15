@@ -199,6 +199,22 @@
                       
                   </tbody>
               </table>
+              <br>
+              <h5 class="card-title">Data Penunjang</h5>
+                <table class="table table-bordered " id="penunjangKuy">
+                  <thead>
+                    <th>Tahun</th>
+                    <th>Kabupaten Kota</th>
+                    <th>Jenis Penunjang</th>
+                    <th>Penunjang</th>
+                    <th>usulan</th>
+                    <th>Approval RK</th>
+                    <th>Sign</th>
+                  </thead>  
+                  <tbody>
+                      
+                  </tbody>
+                </table>
             </div>
             <br>
              
@@ -213,6 +229,8 @@
 $( document ).ready(function() {
 
     var nomorGlobal = 0;
+   
+     
 
      $('input[type=radio][name=wilayah]').change(function() {
        reset()
@@ -352,6 +370,7 @@ $( document ).ready(function() {
       info('Info', 'Pilih bidang terlebih dahulu.!')
       return;
     }
+    getPenunjang();
           
      await  $.ajaxSetup({
            "beforeSend" :  $.LoadingOverlay("show"),
@@ -442,8 +461,80 @@ $( document ).ready(function() {
         setTimeout(scroolOk, 900)    
    }
 
+   var vaGloba = 0;
+
+   function getPenunjang(){ 
+
+      if(vaGloba == 0){
+      tabelPenunjang = $("#penunjangKuy").dataTable({
+              "serverSide": true,
+              "fixedHeader": true,
+              "responsive": true,
+              "prosessing":true,
+              "async":true,
+              paging: false,
+              "searching": false,
+              "ordering": false,
+              "info":     false,
+               bAutoWidth: false,
+              aoColumns : [
+                
+                { sWidth: 'auto' },
+                { sWidth: 'auto' },
+                { sWidth: 'auto' },
+                { sWidth: 'auto' },
+                { sWidth: 'auto' },
+                { sWidth: 'auto' },
+                { sWidth: 'auto' }                
+              ],
+              ajax: {
+              "url": "<?php echo site_url('C_kegiatan/getPenunjang')?>", 
+              "type": "POST",
+               "data": function ( data ) {
+                   data.kdkab =  $('select[name=kota] option').filter(':selected').val()
+    
+                }
+             },
+                  columns: [
+                        {"data": "tahun"},
+                        {"data": "pengusul_nama"},
+                        {"data": "jenis_penunjang"},
+                        {"data": "penunjang"},
+                        {"data": "usulan"},
+                        {"data": "approval_rk"},
+                        {"data": "sign"}
+                  ],
+            "columnDefs": [
+            { 
+                "targets": [ 0,1,2,3,4,5,6], //first column / numbering column
+                "className": "text-center",
+                "orderable": false
+            }
+            ],
+            "aoColumnDefs" : [
+
+            ],
+              order: [[1, 'asc']],
+          rowCallback: function(row, data, iDisplayIndex) {
+              var info = this.fnPagingInfo();
+              var page = info.iPage;
+              var length = info.iLength;
+              $('td:eq(0)', row).html();
+          }
+
+
+      });
+      new $.fn.dataTable.FixedHeader( tabelPenunjang ); 
+      }else{
+        $('#penunjangKuy').DataTable().ajax.reload(null, false)
+      }
+      vaGloba++;
+     
+    
+   }
+
    function scroolOk(argument) {
-      $('html, body').animate({scrollTop:$('#cardDataKegiatan2').position().top}, 'slow')
+      $('html, body').animate({scrollTop:$('#cardDataKegiatan2').position().top}, 'slow');
    }
 
    function reset() {

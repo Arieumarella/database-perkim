@@ -45,6 +45,12 @@ class C_kegiatan extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function getPenunjang()
+	{
+		header('Content-Type: application/json');
+       echo $this->M_dinamis->getPenunjang('tb_penunjang', 'tb_penunjang.*', 'tb_penunjang.*', array('tb_penunjang.tahun' => 'asc'), 'tb_penunjang.*');
+	}
+
 
     public function get_product_json() { //get product data and encode to be JSON object
       header('Content-Type: application/json');

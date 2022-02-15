@@ -107,6 +107,15 @@ public function delete($tabel, $data){
       return $this->datatables->generate();
   }
 
+    public function getPenunjang($tabel, $colom_order, $colom_search, $order, $select)
+    {
+        $this->datatables->select($select);
+        $this->datatables->from($tabel);
+        $this->datatables->where('tb_penunjang.kdkab', $this->input->post('kdkab'));
+        $this->datatables->add_column('view','tahun','pengusul_nama','jenis_penunjang','penunjang','usulan', 'approval_rk','sign');
+        return $this->datatables->generate();
+    }
+
  
     public function count_filtered($tabel, $colom_order, $colom_search, $order, $select)
     {
