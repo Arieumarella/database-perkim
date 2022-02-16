@@ -72,20 +72,86 @@ class C_dr extends CI_Controller {
 		echo json_encode($data);
 	}
 
+   public function exportExcel()
+   {
+	   require(APPPATH. 'PHPExcel/Classes/PHPExcel.php');
+	   require(APPPATH. 'PHPExcel/Classes/PHPExcel/Writer/Excel2007.php');
+
+	   $bidang =  $this->uri->segment(3);
+  	   $provinsi =  $this->uri->segment(4);
+	   $kota =  $this->uri->segment(5);
+	   $kecamatan =  $this->uri->segment(6);
+	   $desa =  $this->uri->segment(7);
+	   
+
+	   $tmp['data'] = $this->M_dinamis->get_all_kegiatan('tb_fisik',  $bidang, $provinsi, $kota, $kecamatan, $desa);
 	
+	   $obj = new PHPExcel();
+	   $obj->getProperties()->setCreator("Sistem Manajamen Asset PFID");
+	   $obj->getProperties()->setLastModifiedBy("Sistem Manajamen Asset PFID");
+	   $obj->getProperties()->setTitle("Data Bidang Perkim");
 
-   function get_product_json() { //get product data and encode to be JSON object
-      header('Content-Type: application/json');
-      echo $this->M_dinamis->get_all_product($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
-  }
+	   $obj->setActiveSheetIndex(0);
 
-   function jsonOK(){
-        $this->load->library('datatables');
-        $this->datatables->select('menu,tahun,rincian,volume_rk,satuan,desa_nama,nmkec');
-        $this->datatables->from('t_rkperkim');
-        $this->datatables->join('tb_provinsi', 't_rkperkim.kdlokasi=tb_provinsi.kd_prov', 'INNER');
-      $this->datatables->join('tb_kabupaten', 't_rkperkim.kdkabkota   = tb_kabupaten.kd_kab and t_rkperkim.kdlokasi=tb_kabupaten.kd_prov', 'INNER');
-        return print_r($this->datatables->generate());
-    }
+	   $obj->getActiveSheet()->setCellValue('A1', 'TAHUN');
+	   $obj->getActiveSheet()->setCellValue('B1', 'PROVINSI');
+	   $obj->getActiveSheet()->setCellValue('C1', 'kAB/KOTA');
+	   $obj->getActiveSheet()->setCellValue('D1', 'KECAMATAN');
+	   $obj->getActiveSheet()->setCellValue('E1', 'DESA');
+	   $obj->getActiveSheet()->setCellValue('F1', 'JENIS');
+	   $obj->getActiveSheet()->setCellValue('G1', 'TEMATIK');
+	   $obj->getActiveSheet()->setCellValue('H1', 'MENU');
+	   $obj->getActiveSheet()->setCellValue('I1', 'RINCIAN');
+	   $obj->getActiveSheet()->setCellValue('J1', 'VELUME USULAN');
+	   $obj->getActiveSheet()->setCellValue('K1', 'NILAI USULAN');
+	   $obj->getActiveSheet()->setCellValue('L1', 'KOMPONEN RK');
+	   $obj->getActiveSheet()->setCellValue('M1', 'VOLUME RK');
+	   $obj->getActiveSheet()->setCellValue('N1', 'NILAI RK');
+	   $obj->getActiveSheet()->setCellValue('O1', 'APPROVAL RK');
+	   $obj->getActiveSheet()->setCellValue('P1', 'SIGN');
+	   $obj->getActiveSheet()->setCellValue('Q1', 'SATUAN');
 
+	   $row = 2;
+
+	   foreach ( $tmp['data'] as $key) {
+		$obj->getActiveSheet()->setCellValue('A'.$row, $key->tahun);
+		$obj->getActiveSheet()->setCellValue('B'.$row, $key->provinsi_nama);
+		$obj->getActiveSheet()->setCellValue('C'.$row, $key->pengusul_nama);
+		$obj->getActiveSheet()->setCellValue('D'.$row, $key->kecamatan_nama);
+		$obj->getActiveSheet()->setCellValue('E'.$row, $key->desa_nama);
+		$obj->getActiveSheet()->setCellValue('F'.$row, $key->jenis);
+		$obj->getActiveSheet()->setCellValue('G'.$row, $key->tematik);
+		$obj->getActiveSheet()->setCellValue('H'.$row, $key->menu);
+		$obj->getActiveSheet()->setCellValue('I'.$row, $key->rincian);
+		$obj->getActiveSheet()->setCellValue('J'.$row, $key->volume_usulan);
+		$obj->getActiveSheet()->setCellValue('K'.$row, $key->nilai_usulan);
+		$obj->getActiveSheet()->setCellValue('L'.$row, $key->komponen_rk);
+		$obj->getActiveSheet()->setCellValue('M'.$row, $key->volume_rk);
+		$obj->getActiveSheet()->setCellValue('N'.$row, $key->nilai_rk);
+		$obj->getActiveSheet()->setCellValue('O'.$row, $key->approval_rk);
+		$obj->getActiveSheet()->setCellValue('P'.$row, $key->sign);
+		$obj->getActiveSheet()->setCellValue('Q'.$row, $key->Satuan);
+		
+		$row++;
+	   }
+
+	   $filename = "Data_Bidang".'.xlsx';
+	   $obj->getActiveSheet()->setTitle("Data_Bidang");
+	//    header('Content-Type: applicatin/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	//    header('Content-Disposition: attachment;filename="'.$filename.'"');
+	//    header('Cache-Control: max-age=0');
+
+	   header("Pragma: public");
+	   header("Expires: 0");
+	   header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	   header("Content-Type: application/force-download");
+	   header("Content-Type: application/octet-stream");
+	   header("Content-Type: application/download");;
+	   header("Content-Disposition: attachment;filename=$filename");
+
+	   $writer=PHPExcel_IOFactory::createwriter($obj, 'Excel2007');
+	   $writer->save('php://output');
+	
+	   exit;
+   }
 }

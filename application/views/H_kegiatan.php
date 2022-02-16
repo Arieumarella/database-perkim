@@ -365,7 +365,7 @@ $( document ).ready(function() {
 
    getData = async function() {
 
-    var bidang =  $('select[name=bidangSlect] option').filter(':selected').val()
+    var bidang =  $('select[name=bidangSlect] option').filter(':selected').val();
     if(bidang == 0){
       info('Info', 'Pilih bidang terlebih dahulu.!')
       return;

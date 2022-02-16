@@ -62,8 +62,8 @@
                 <div class="row mb-3">
                   <label for="inputEmail3" class="col-sm-2 col-form-label">Pilih Bidang :</label>
                   <div class="col-sm-3">
-                    <select id="inputState" class="form-select form-select-sm">
-                    <option selected>--- Pilih Bidang ---</option>
+                    <select id="inputState" name="bidangOption" class="form-select form-select-sm">
+                    <option value="0" selected>--- Pilih Bidang ---</option>
                     <?php  foreach ($dataBidang as $data) {?>
                         
                     <option value="<?php echo $data->idx; ?>"><?php echo $data->nama_bidang; ?></option>
@@ -126,7 +126,7 @@
                   <label for="kabSelect" class="col-sm-2 col-form-label">Pilih Kab/Kota :</label>
                   <div class="col-sm-3">
                     <select class="form-select form-select-sm select2" name="kota" id="kabSelect">
-                     
+                    <option>--- Pilih Kab/Kota ---</option>
                     
                   </select>
                   </div>
@@ -180,6 +180,29 @@
 $( document ).ready(function() {
 
     var nomorGlobal = 0;
+
+
+    getData = async function() {
+
+      var lvl = $('input[name=wilayah]:checked').val();
+      var idProv2 = $( "#provinsiSelect option:selected" ).val(); 
+      var idKab = $( "#kabSelect option:selected" ).val(); 
+
+      var bidang =  $('select[name=bidangOption] option').filter(':selected').val();
+      var provinsi = (lvl != 'allWilayah' && idProv2 != 'default') ? $('select[name=provSelect] option:selected').val():null;
+      var kota = (lvl != "allWilayah" && lvl != 'provinsi' && idKab != 'default') ? $('select[name=kota] option:selected').val():null;
+      var kecamatan = (lvl == 'kecamatan' || lvl == 'desa') ? $('select[name=kecamatan] option:selected').val():null;
+      var desa = (lvl == 'desa') ? $('select[name=desa] option:selected').val():null; 
+
+
+      if(bidang == 0){
+        info('Info', 'Pilih bidang terlebih dahulu.!')
+        return;
+      }
+
+      window.open(base_url()+'C_dr/exportExcel/'+bidang+'/'+provinsi+'/'+kota+'/'+kecamatan+'/'+desa,'_blank');     
+        
+  }
 
      $('input[type=radio][name=wilayah]').change(function() {
        reset()
@@ -312,10 +335,7 @@ $( document ).ready(function() {
     });
    } 
 
-   getData = async function() {
-          
-     alert('prosess Download.!');   
-   }
+   
 
    function scroolOk(argument) {
       $('html, body').animate({scrollTop:$('#cardDataKegiatan2').position().top}, 'slow')

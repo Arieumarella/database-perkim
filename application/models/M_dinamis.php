@@ -105,7 +105,33 @@ public function delete($tabel, $data){
 
       $this->datatables->add_column('view','menu','tahun','rincian','volume_rk','Satuan','desa_nama','kecamatan_nama');
       return $this->datatables->generate();
-  }
+    }
+
+    public function get_all_kegiatan($tabel, $bidang, $provinsi, $kota, $kecamatan, $desa) {
+        $this->db->select('tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
+        $this->db->from($tabel);
+        $this->db->join('tb_provinsi', 'tb_fisik.kdprov=tb_provinsi.kd_prov', 'INNER');
+        $this->db->join('tb_kabupaten', 'tb_fisik.kdkab=tb_kabupaten.kd_kab and tb_fisik.kdprov = tb_kabupaten.kab_kd_prov', 'INNER');
+  
+        if ($provinsi !== 'null') {
+            $this->db->where('tb_fisik.kdprov', $provinsi);
+        }
+        if ($kota !== 'null') {
+            $this->db->where('tb_fisik.kdkab', $kota);
+        }
+        if ($kecamatan !== 'null') {
+            $this->db->where('tb_fisik.kdkec', $kecamatan);
+        }
+        if ($desa !== 'null') {
+            $this->db->where('tb_fisik.kddesa', $desa);
+        }
+  
+        if ( $bidang !== 'null') {
+          $this->db->where('tb_fisik.kdbidang', $bidang);
+       }
+       
+        return $this->db->get()->result();
+      }
 
     public function getPenunjang($tabel, $colom_order, $colom_search, $order, $select)
     {
