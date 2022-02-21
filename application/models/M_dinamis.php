@@ -81,7 +81,7 @@ public function delete($tabel, $data){
 
 
     public function get_all_product($tabel, $colom_order, $colom_search, $order, $select) {
-      $this->datatables->select('tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
+      $this->datatables->select('tb_fisik.menu,tb_fisik.tahun,tb_fisik.rincian,tb_fisik.volume_rk,tb_fisik.Satuan,tb_fisik.desa_nama,tb_fisik.kecamatan_nama, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
       $this->datatables->from($tabel);
       $this->datatables->join('tb_provinsi', 'tb_fisik.kdprov=tb_provinsi.kd_prov', 'INNER');
       $this->datatables->join('tb_kabupaten', 'tb_fisik.kdkab=tb_kabupaten.kd_kab and tb_fisik.kdprov = tb_kabupaten.kab_kd_prov', 'INNER');

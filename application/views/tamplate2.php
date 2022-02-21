@@ -194,7 +194,7 @@
   <!-- ======= Footer ======= -->
   <!-- End Footer -->
 
-  <a href="<?php echo base_url();?>#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
  
   <!-- Vendor JS Files -->
   <script src="<?php echo base_url();?>assets/vendor/apexcharts/apexcharts.min.js"></script>
@@ -243,6 +243,11 @@
     // fontawesome     : "fas fa-sync-alt fa-spin",
     
     });
+
+  function scrollOnTop() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  } 
     
   </script>
 
