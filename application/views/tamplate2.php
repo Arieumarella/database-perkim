@@ -14,7 +14,7 @@
   <link href="<?php echo base_url();?>assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- jhvb -->
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -29,8 +29,8 @@
   <!-- <link href="<?php echo base_url();?>assets/vendor/simple-datatables/style.css" rel="stylesheet"> -->
 
   <!-- Select2 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css" />
+  <link rel="stylesheet" href="<?= base_url();?>assets/css/select2.css" />
+ <link rel="stylesheet" href="<?= base_url();?>assets/css/select2.theme.boot.css" />
 <!-- Or for RTL support -->
 
   <!-- Template Main CSS File -->
@@ -40,21 +40,18 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/pace/themes/black/pace-theme-flash.css"> 
 
   <!-- Css Datatables -->
-  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.2.0/css/fixedHeader.bootstrap5.min.css"> -->
-  
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="<?= base_url();?>assets/css/dataTables/dataTables.bootstrap5.css">
+  <link rel="stylesheet" type="text/css" href="<?= base_url();?>assets/css/dataTables/dataTables.bootstrap.css">
 
   <!-- iziToast -->
    <link rel="stylesheet" href="<?php echo base_url();?>assets/iziToast/css/iziToast.min.css">
   <link rel="stylesheet" href="<?php echo base_url();?>assets/sweetalert/tools/sweetAlert.css">
 
   <script src="<?php echo base_url(); ?>assets/sweetalert/sweetAlert.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
+  <script src="<?= base_url();?>assets/js/pace.js"></script>
+  <script src="<?= base_url();?>assets/js/jquery.js"></script>
+  <script src="<?= base_url();?>assets/js/jq-ui.js" ></script>
+  
  
   <script type="text/javascript">
     function base_url(){
@@ -227,13 +224,9 @@
   <script src="<?php echo base_url(); ?>assets/daterangepicker/daterangepicker.js"></script>
 
   <!-- Datatables JS -->
-  <!-- <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script> -->
-  <!-- <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-  <script src="https://cdn.datatables.net/fixedheader/3.2.0/js/dataTables.fixedHeader.min.js"></script> -->
-  
-  <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
-  <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+  <script src="<?= base_url();?>assets/js/datatables/jq-dataTtables.js"></script>
+  <script src="<?= base_url();?>assets/js/datatables/dataTables.bootsrap5.js"></script>
+  <script src="<?= base_url();?>assets/js/datatables/dataTables.responsive.js"></script>
   
   <!-- Select2 -->
   <script src="<?= base_url();?>assets/js/select2.js"></script>

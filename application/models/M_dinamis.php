@@ -11,27 +11,7 @@ public function add_all($tabel, $select, $order, $urut)
     return $this->db->get()->result();
 }
 
-public function add_in($tabel, $select, $order, $urut, $where)
-{
-    $this->db->from($tabel);
-    $this->db->select($select);
-     $this->db->where_in('id_slug', $where);
-    $this->db->order_by($order, $urut);
-    return $this->db->get()->result();
-}
 
-public function update($tabel, $dataUbah, $where){
-    $this->db->where($where);
-   return $this->db->update($tabel, $dataUbah);
-}
-
-public function slug_id($tabel, $select, $order, $urut)
-{
-    $this->db->from($tabel);
-    $this->db->select($select);
-    $this->db->order_by($order, $urut);
-    return $this->db->get()->result_array();
-}
 
 public function max_value($tabel, $select)
 {
@@ -44,10 +24,7 @@ public function save($tabel, $data){
     return $this->db->insert($tabel, $data);
 }
 
-public function countDataById($tabel, $data)
-{
-    return $this->db->get_where($tabel, $data)->num_rows();
-}
+
 
 public function getResult($tabel, $data)
 {
@@ -113,7 +90,8 @@ public function delete($tabel, $data){
         $this->db->from($tabel);
         $this->db->join('tb_provinsi', 'tb_fisik.kdprov=tb_provinsi.kd_prov', 'INNER');
         $this->db->join('tb_kabupaten', 'tb_fisik.kdkab=tb_kabupaten.kd_kab and tb_fisik.kdprov = tb_kabupaten.kab_kd_prov', 'INNER');
-  
+        $this->db->where('tb_fisik.approval_rk', 'Approved');
+        $this->db->where('tb_fisik.sign', '1');
         if ($provinsi !== 'null') {
             $this->db->where('tb_fisik.kdprov', $provinsi);
         }
@@ -141,26 +119,24 @@ public function delete($tabel, $data){
         $this->datatables->where('tb_penunjang.kdkab', $this->input->post('kdkab'));
         $this->datatables->where('tb_penunjang.approval_rk', 'Approved');
         $this->datatables->where('tb_penunjang.sign', 1);
-        $this->db->where("tb_penunjang.usulan !=", '0');
+        $this->datatables->where("tb_penunjang.usulan !=", '0');
         $this->datatables->add_column('view','tahun,pengusul_nama,jenis_penunjang,penunjang,usulan,approval_rk');
         return $this->datatables->generate();
     }
 
- 
-    public function count_filtered($tabel, $colom_order, $colom_search, $order, $select)
+    public function getPenunjangDownload($kdkab)
     {
-        
-        // $this->_get_datatables_query($tabel, $colom_order, $colom_search, $order, $select);
-        return $this->db->count_all_results();
-    }
- 
-    public function count_all($tabel)
-    {
-        return $this->db->count_all_results($tabel);
-        
+        $this->db->select('tb_penunjang.*');
+        $this->db->from('tb_penunjang');
+        $this->db->where('tb_penunjang.kdkab', $kdkab);
+        $this->db->where('tb_penunjang.approval_rk', 'Approved');
+        $this->db->where('tb_penunjang.sign', 1);
+        $this->db->where("tb_penunjang.usulan !=", '0');
+        return $this->db->get()->result();
     }
 
-	
+ 
+    	
 }
 
 /* End of file M_dinamis.php */

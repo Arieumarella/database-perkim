@@ -31,6 +31,8 @@ class C_kegiatan extends CI_Controller {
 		$tmp['dataBidang'] = $this->M_dinamis->add_all('tb_bidang', '*', 'idx', 'asc');
 		$tmp['dataProvinsi'] = $this->M_dinamis->add_all('tb_provinsi', '*', 'kd_prov', 'asc');
 		$this->load->view('tamplate2.php', $tmp);
+
+		
 	}
 
 	public function getDaerah()
@@ -57,19 +59,7 @@ class C_kegiatan extends CI_Controller {
       echo $this->M_dinamis->getFisik($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
   	}
   	
-    public function get_data_tables2()
-    {
-      $provinsi =  $this->input->post('provinsi');
-      $kab =  $this->input->post('kota');
-
-      $data = array(
-      	'provinsi' => $provinsi,
-      	'kab' => $kab
-      );
-
-      echo json_encode($data);
-    }
-
+   
 }
 
 /* End of file C_kegiatan.php */

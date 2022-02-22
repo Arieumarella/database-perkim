@@ -135,11 +135,42 @@ class C_dr extends CI_Controller {
 		$row++;
 	   }
 
-	   $filename = "Data_Bidang".'.xlsx';
-	   $obj->getActiveSheet()->setTitle("Data_Bidang");
-	//    header('Content-Type: applicatin/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-	//    header('Content-Disposition: attachment;filename="'.$filename.'"');
-	//    header('Cache-Control: max-age=0');
+	   $obj->getActiveSheet()->setTitle("Data_Fisik");
+	   //////////////////////////////////////////////////////////////////////
+	   if ($kota !== 'null') {
+	   $tmp['penunjang'] = $this->M_dinamis->getPenunjangDownload($kota);
+
+	   $obj->createSheet();
+
+	   $obj->setActiveSheetIndex(1);
+	   
+	   $obj->getActiveSheet()->setCellValue('A1', 'TAHUN');
+	   $obj->getActiveSheet()->setCellValue('B1', 'kAB/KOTA');
+	   $obj->getActiveSheet()->setCellValue('C1', 'JENIS PENUNJANG');
+	   $obj->getActiveSheet()->setCellValue('D1', 'PENUNJANG');
+	   $obj->getActiveSheet()->setCellValue('E1', 'USULAN');
+	   $obj->getActiveSheet()->setCellValue('F1', 'APPROVAL RK');
+
+	   $row = 2;
+
+	   foreach ( $tmp['penunjang'] as $key) {
+		
+		$obj->getActiveSheet()->setCellValue('A'.$row, $key->tahun);
+		$obj->getActiveSheet()->setCellValue('B'.$row, $key->pengusul_nama);
+		$obj->getActiveSheet()->setCellValue('C'.$row, $key->jenis_penunjang);
+		$obj->getActiveSheet()->setCellValue('D'.$row, $key->penunjang);
+		$obj->getActiveSheet()->setCellValue('E'.$row, $key->usulan);
+		$obj->getActiveSheet()->setCellValue('F'.$row, $key->approval_rk);
+				
+		$row++;
+	   }
+
+	  
+	   $obj->getActiveSheet()->setTitle("Data_Penunjang");
+	}
+	   
+	   $filename = "Data_Bidang".'.xlsx';	
+	
 
 	   header("Pragma: public");
 	   header("Expires: 0");

@@ -196,7 +196,7 @@ $( document ).ready(function() {
 
 
       if(bidang == 0){
-        info('Info', 'Pilih bidang terlebih dahulu.!')
+        error('Info', 'Pilih bidang terlebih dahulu.!')
         return;
       }
 
