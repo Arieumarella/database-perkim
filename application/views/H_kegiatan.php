@@ -188,10 +188,11 @@
                           <th>Kab/Kota</th>
                           <th>Kecamatan</th>
                           <th>Desa</th>
-                          <th>Rincian</th>
-                          <th>Satuan</th>
-                          <th>Volume</th>
                           <th>Menu</th>
+                          <th>Rincian</th>
+                          <th>Volume</th>
+                          <th>Satuan</th>
+                          <th>Nilai Usulan</th>
                           <th>Tahun</th>
                       </tr>
                   </thead>
@@ -209,7 +210,6 @@
                     <th>Penunjang</th>
                     <th>usulan</th>
                     <th>Approval RK</th>
-                    <th>Sign</th>
                   </thead>  
                   <tbody>
                       
@@ -367,7 +367,7 @@ $( document ).ready(function() {
 
     var bidang =  $('select[name=bidangSlect] option').filter(':selected').val();
     if(bidang == 0){
-      info('Info', 'Pilih bidang terlebih dahulu.!')
+      error('Info', 'Pilih bidang terlebih dahulu.!')
       return;
     }
     getPenunjang();
@@ -404,7 +404,7 @@ $( document ).ready(function() {
                 
               ],
               ajax: {
-              "url": "<?php echo site_url('C_kegiatan/get_product_json')?>", 
+              "url": "<?php echo site_url('C_kegiatan/getFisik')?>", 
               "type": "POST",
                "data": function ( data ) {
                      var lvl = $('input[name=wilayah]:checked').val();
@@ -419,28 +419,31 @@ $( document ).ready(function() {
                 }
              },
                   columns: [
-                        {"data": "nama_prov"},
-                        {"data": "nama_kab"},
+                        {"data": "provinsi_nama"},
+                        {"data": "pengusul_nama"},
                         {"data": "kecamatan_nama"},
                         {"data": "desa_nama"},
-                        {"data": "rincian"},
-                        {"data": "Satuan"},
-                        {"data": "volume_rk"},
                         {"data": "menu"},
+                        {"data": "rincian"},
+                        {"data": "volume_rk"},
+                        {"data": "Satuan"},
+                        {"data": "nilai_usulan", "render": function(data, type, row) {
+                                                            return 'Rp. '+data;
+                                                          }},
                         {"data": "tahun"},
                   ],
             "columnDefs": [
             { 
                 "targets": [ 0,1,2,3,4,5,6,7,8], //first column / numbering column
                 "className": "text-center",
-                "orderable": false
+                // "orderable": true
             }
             ],
             "aoColumnDefs" : [
 
             ],
               order: [[1, 'asc']],
-          rowCallback: function(row, data, iDisplayIndex) {
+              rowCallback: function(row, data, iDisplayIndex) {
               var info = this.fnPagingInfo();
               var page = info.iPage;
               var length = info.iLength;
@@ -451,7 +454,7 @@ $( document ).ready(function() {
       });
       // await $("#cardDataKegiatan2").css("display", "block");
       // scroolOk()
-      new $.fn.dataTable.FixedHeader( dataTables1 );
+      // new $.fn.dataTable.FixedHeader( dataTables1 );
       }else{
        await $('#dataKegiatan').DataTable().ajax.reload(null, false)
       }
@@ -484,7 +487,6 @@ $( document ).ready(function() {
                 { sWidth: 'auto' },
                 { sWidth: 'auto' },
                 { sWidth: 'auto' },
-                { sWidth: 'auto' },
                 { sWidth: 'auto' }                
               ],
               ajax: {
@@ -500,13 +502,19 @@ $( document ).ready(function() {
                         {"data": "pengusul_nama"},
                         {"data": "jenis_penunjang"},
                         {"data": "penunjang"},
-                        {"data": "usulan"},
-                        {"data": "approval_rk"},
-                        {"data": "sign"}
+                        {"data": "usulan", "render": function(data, type, row) {
+                                                    
+                                                    var reverse = data.toString().split('').reverse().join(''),
+                                                    ribuan = reverse.match(/\d{1,3}/g);
+                                                    ribuan = ribuan.join('.').split('').reverse().join('');
+                                                    return 'Rp. '+ribuan;
+
+                                                    }},
+                        {"data": "approval_rk"}
                   ],
             "columnDefs": [
             { 
-                "targets": [ 0,1,2,3,4,5,6], //first column / numbering column
+                "targets": [ 0,1,2,3,4,5], //first column / numbering column
                 "className": "text-center",
                 "orderable": false
             }
@@ -515,16 +523,16 @@ $( document ).ready(function() {
 
             ],
               order: [[1, 'asc']],
-          rowCallback: function(row, data, iDisplayIndex) {
-              var info = this.fnPagingInfo();
-              var page = info.iPage;
-              var length = info.iLength;
-              $('td:eq(0)', row).html();
-          }
+          // rowCallback: function(row, data, iDisplayIndex) {
+          //     var info = this.fnPagingInfo();
+          //     var page = info.iPage;
+          //     var length = info.iLength;
+          //     $('td:eq(0)', row).html();
+          // }
 
 
       });
-      new $.fn.dataTable.FixedHeader( tabelPenunjang ); 
+      // new $.fn.dataTable.FixedHeader( tabelPenunjang ); 
       }else{
         $('#penunjangKuy').DataTable().ajax.reload(null, false)
       }

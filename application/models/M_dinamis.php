@@ -80,12 +80,10 @@ public function delete($tabel, $data){
     }
 
 
-    public function get_all_product($tabel, $colom_order, $colom_search, $order, $select) {
-      $this->datatables->select('tb_fisik.menu,tb_fisik.tahun,tb_fisik.rincian,tb_fisik.volume_rk,tb_fisik.Satuan,tb_fisik.desa_nama,tb_fisik.kecamatan_nama, tb_kabupaten.nama_kab, tb_provinsi.nama_prov ');
+    public function getFisik($tabel, $colom_order, $colom_search, $order, $select) {
+      $this->datatables->select('tb_fisik.provinsi_nama, tb_fisik.pengusul_nama, tb_fisik.kecamatan_nama,tb_fisik.desa_nama,tb_fisik.menu, tb_fisik.rincian, tb_fisik.volume_rk, tb_fisik.Satuan, tb_fisik.nilai_usulan, tb_fisik.tahun');
       $this->datatables->from($tabel);
-      $this->datatables->join('tb_provinsi', 'tb_fisik.kdprov=tb_provinsi.kd_prov', 'INNER');
-      $this->datatables->join('tb_kabupaten', 'tb_fisik.kdkab=tb_kabupaten.kd_kab and tb_fisik.kdprov = tb_kabupaten.kab_kd_prov', 'INNER');
-
+      
       if ($this->input->post('provinsi')) {
           $this->datatables->where('tb_fisik.kdprov', $this->input->post('provinsi'));
       }
@@ -103,7 +101,10 @@ public function delete($tabel, $data){
         $this->datatables->where('tb_fisik.kdbidang', $this->input->post('bidang'));
      }
 
-      $this->datatables->add_column('view','menu','tahun','rincian','volume_rk','Satuan','desa_nama','kecamatan_nama');
+     $this->datatables->where('tb_fisik.approval_rk', 'Approved');
+     $this->datatables->where('tb_fisik.sign', '1');
+    
+      $this->datatables->add_column('view','provinsi_nama,pengusul_nama,kecamatan_nama,desa_nama,menu,rincian,volume_rk,Satuan,nilai_usulan,tahun');
       return $this->datatables->generate();
     }
 
@@ -138,7 +139,10 @@ public function delete($tabel, $data){
         $this->datatables->select($select);
         $this->datatables->from($tabel);
         $this->datatables->where('tb_penunjang.kdkab', $this->input->post('kdkab'));
-        $this->datatables->add_column('view','tahun','pengusul_nama','jenis_penunjang','penunjang','usulan', 'approval_rk','sign');
+        $this->datatables->where('tb_penunjang.approval_rk', 'Approved');
+        $this->datatables->where('tb_penunjang.sign', 1);
+        $this->db->where("tb_penunjang.usulan !=", '0');
+        $this->datatables->add_column('view','tahun,pengusul_nama,jenis_penunjang,penunjang,usulan,approval_rk');
         return $this->datatables->generate();
     }
 

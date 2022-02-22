@@ -4,14 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class C_kegiatan extends CI_Controller {
 
 	protected $tabel = 'tb_fisik';
-	protected $select = 'tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov';
-	protected $colom_search = array('tb_fisik.tahun', 'tb_fisik.menu', 'tb_fisik.rincian','tb_fisik.volume_rk','tb_fisik.satuan','tb_fisik.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
-	protected $colom_order = array('tb_fisik.tahun', 'tb_fisik.menu', 'tb_fisik.rincian','tb_fisik.volume_rk','tb_fisik.satuan','tb_fisik.nilai_rk', 'tb_kabupaten.nama_kab', 'tb_provinsi.nama_prov');
+	protected $select = 'tb_fisik.provinsi_nama, tb_fisik.pengusul_nama, tb_fisik.kecamatan_nama,tb_fisik.desa_nama,tb_fisik.menu, tb_fisik.rincian, tb_fisik.volume_rk, tb_fisik.Satuan, tb_fisik.nilai_usulan, tb_fisik.tahun';
+	protected $colom_search = array('tb_fisik.provinsi_nama', 'tb_fisik.pengusul_nama', 'tb_fisik.kecamatan_nama','tb_fisik.desa_nama','tb_fisik.menu',' tb_fisik.rincian', 'tb_fisik.volume_rk', 'tb_fisik.Satuan', 'tb_fisik.nilai_usulan', 'tb_fisik.tahun');
+	protected $colom_order = array('tb_fisik.provinsi_nama', 'tb_fisik.pengusul_nama', 'tb_fisik.kecamatan_nama','tb_fisik.desa_nama','tb_fisik.menu',' tb_fisik.rincian', 'tb_fisik.volume_rk', 'tb_fisik.Satuan', 'tb_fisik.nilai_usulan', 'tb_fisik.tahun');
 	protected $order = array('tb_fisik.tahun' => 'asc');
 	protected $where,$data;
 
 	// M_dinamis
-	protected $select2 = 'tb_fisik.*, tb_kabupaten.nama_kab, tb_provinsi.nama_prov, tb_kecamatan.nam_kec, tb_desa.nama_desa';
+	protected $select2 = 'tb_fisik.provinsi_nama, tb_fisik.pengusul_nama, tb_fisik.kecamatan_nama,tb_fisik.desa_nama,tb_fisik.menu, tb_fisik.rincian, tb_fisik.volume_rk, tb_fisik.Satuan, tb_fisik.nilai_usulan, tb_fisik.tahun';
 	protected $order2 = 'tb_fisik.tahun';
 	protected $urut = 'asc';
 
@@ -52,9 +52,9 @@ class C_kegiatan extends CI_Controller {
 	}
 
 
-    public function get_product_json() { //get product data and encode to be JSON object
+    public function getFisik() { //get product data and encode to be JSON object
       header('Content-Type: application/json');
-      echo $this->M_dinamis->get_all_product($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
+      echo $this->M_dinamis->getFisik($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
   	}
   	
     public function get_data_tables2()
