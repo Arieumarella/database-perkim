@@ -4,6 +4,10 @@
     padding: 20px 0 15px 25px;
     
   }
+
+  .card-tinggi {
+    height: 450px;
+  }
 </style>
 
 
@@ -33,7 +37,7 @@
                 </div> -->
 
 
-                <div class="card-body">
+                <div class="card-body card-tinggi">
                   <div class="row">
                     <div class="col-3">  
                         <h5 class="card-title">Grafik Kegiatan</h5>
@@ -90,7 +94,7 @@
                   </ul>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body card-tinggi">
                   <h5 class="card-title">Grafik Lokpri</h5>
 
                   <!-- Line Chart -->
@@ -115,23 +119,95 @@
 
     <script type="text/javascript">
       $( document ).ready(function() {
-
         
+       
+       $(".card-tinggi").LoadingOverlay("show")
 
-        chartKegiatan()        
+
+        getKegiatan()
+        function getKegiatan(){
+          $.ajax({
+              url: base_url()+'C_dashboard/getKegiatan',
+              type: "post",
+              dataType: 'json',
+              success: async function (res) {
+                dataRK = await getNilaiRK();
+                var tahun = [];
+                var dataKegiatan = [];
+                var dataNilaiRK = [];
+
+                for(let i = 0; i < res.length; i++){
+                  tahun.push(res[i].tahun);
+                  dataKegiatan.push({
+                      x: res[i].tahun,
+                      y: res[i].nilai_ususlan,
+                      product: 'name',
+                      info: 'info',
+                      site: 'name'
+                    });
+
+                  dataNilaiRK.push({
+                      x: dataRK[i].tahun,
+                      y: dataRK[i].nilaiRK,
+                      product: 'name',
+                      info: 'info',
+                      site: 'name'
+                    });
+                }
+
+              var series = [
+                  {
+                    name: 'Dana Kegiatan Tahunan',
+                    data: dataKegiatan,
+                  },
+                  {
+                    name: 'Dana Nilai RK',
+                    data: dataNilaiRK,
+                  }
+                ]
+                
+                chartKegiatan(tahun, series); 
+                $(".card-tinggi").LoadingOverlay("hide")
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                error('Error', 'Ada yang Error Silahkan Hubungi Developer')
+              }
+          });
+        }
+
+
+       
+        
+    async  function getNilaiRK(){
+      var data;
+        await $.ajax({
+              url: base_url()+'C_dashboard/getNilaiRk',
+              type: "post",
+              dataType: 'json',
+              success: function (res) {
+               data = res
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                error('Error', 'Ada yang Error Silahkan Hubungi Developer')
+                
+              }
+          });
+          return data;
+     }
+
+              
         chartLokpri()
 
-        function chartKegiatan() {
+        function chartKegiatan(tahun, series) {
           new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'Sales',
-                          data: [31, 40, 28, 51, 42, 82, 56],
-                        }],
+                        series: series,
                         chart: {
                           height: 350,
                           type: 'line',
                           toolbar: {
-                            show: false
+                            show: true
                           },
                         },
                         markers: {
@@ -156,8 +232,16 @@
                         },
                         xaxis: {
                           type: 'String',
-                          categories: ["Januari", "February", "Maret", "April", "Mei", "Juni", "Juli"]
+                          categories: tahun
                         },
+                        tooltip: {
+                          y: {
+                            formatter: function(value) {
+                              return   "Rp. " + formatRupiah(value);
+                            }
+                          }
+                         
+                        }
                         }).render();
         }
 
@@ -214,6 +298,13 @@
                           },
                         }
                       }).render();
+        }
+
+        function formatRupiah(angka){
+          const format = angka.toString().split('').reverse().join('');
+          const convert = format.match(/\d{1,3}/g);
+          const rupiah = convert.join('.').split('').reverse().join('');
+          return rupiah;
         }
 
       })

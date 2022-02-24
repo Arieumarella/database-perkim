@@ -337,7 +337,7 @@ $( document ).ready(function() {
      // console.log(dataParam);
 
     $.ajax({
-        url: base_url()+'C_dashboard/getDaerah',
+        url: base_url()+'C_kegiatan/getDaerah2',
         type: "post",
         dataType: 'json',
         beforeSend: $.LoadingOverlay("show"),

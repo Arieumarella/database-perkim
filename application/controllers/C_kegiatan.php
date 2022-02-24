@@ -58,6 +58,44 @@ class C_kegiatan extends CI_Controller {
       header('Content-Type: application/json');
       echo $this->M_dinamis->getFisik($this->tabel, $this->colom_order, $this->colom_search, $this->order, $this->select);
   	}
+	
+	  public function getDaerah2()
+	  {
+		  
+		  $lvl = $this->input->post('lvl');
+  
+		  switch ($lvl) {
+			case "1":
+				$id_provinsi = $this->input->post('idProv');
+			  $lemparData = array(
+			  'kab_kd_prov' => $id_provinsi
+			  );
+			  $data = $this->M_dinamis->getResult('tb_kabupaten', $lemparData);
+			  break;
+			case "2":
+			  $id_provinsi = $this->input->post('idProv');
+			  $id_kab = $this->input->post('idKab');
+			  $lemparData = array(
+			  'kd_prov' => $id_provinsi,
+			  'kd_kab' => $id_kab
+			  );
+			  $data = $this->M_dinamis->getResult('tb_kecamatan', $lemparData);
+			  break;
+			case "3":
+			  $id_provinsi = $this->input->post('idProv');
+			  $id_kab = $this->input->post('idKab');
+			  $id_kec = $this->input->post('idKec');
+			  $lemparData = array(
+			  'kd_prov' => $id_provinsi,
+			  'kdkota' => $id_kab,
+			  'kdkec' => $id_kec
+			  );
+			  $data = $this->M_dinamis->getResult('tb_desa', $lemparData);
+			  break;
+			
+		  }
+		  echo json_encode($data);
+	  }
   	
    
 }
