@@ -209,7 +209,6 @@
                     <th>Jenis Penunjang</th>
                     <th>Penunjang</th>
                     <th>usulan</th>
-                    <th>Approval RK</th>
                   </thead>  
                   <tbody>
                       
@@ -486,7 +485,6 @@ $( document ).ready(function() {
                 { sWidth: 'auto' },
                 { sWidth: 'auto' },
                 { sWidth: 'auto' },
-                { sWidth: 'auto' },
                 { sWidth: 'auto' }                
               ],
               ajax: {
@@ -509,12 +507,11 @@ $( document ).ready(function() {
                                                     ribuan = ribuan.join('.').split('').reverse().join('');
                                                     return 'Rp. '+ribuan;
 
-                                                    }},
-                        {"data": "approval_rk"}
+                                                    }}
                   ],
             "columnDefs": [
             { 
-                "targets": [ 0,1,2,3,4,5], //first column / numbering column
+                "targets": [ 0,1,2,3,4], //first column / numbering column
                 "className": "text-center",
                 "orderable": false
             }
