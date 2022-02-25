@@ -35,8 +35,8 @@ class C_login extends CI_Controller {
             'logged' => TRUE,
             'id_slug' => $login->idx,
             'name'   => $login->username,
-            'roll' => 	$login->role
-        );
+            'roll' => 	$login->role,
+					);
         $this->session->set_userdata($data);
         redirect('C_dashboard');
 
@@ -52,7 +52,6 @@ class C_login extends CI_Controller {
 	public function Distroy()
 	{
 	$this->session->sess_destroy();
-
     $this->session->set_flashdata('login', 'you have logged out.!');
     redirect('C_login');
 	}
